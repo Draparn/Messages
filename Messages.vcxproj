@@ -151,7 +151,15 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="ConsoleInput.cpp" />
+    <ClCompile Include="ConsoleUI.cpp" />
     <ClCompile Include="Messages.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="BaseInput.h" />
+    <ClInclude Include="BaseUI.h" />
+    <ClInclude Include="ConsoleInput.h" />
+    <ClInclude Include="ConsoleUI.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
