@@ -1,68 +1,94 @@
 #include "ConsoleUI.h"
+#include "Account.h"
 #include <iostream>
 
-#define PRINT(x) std::cout << x;
+#define PRINT(x) std::cout << x;	//TODO: Modify this to take a variable amount of args.
 
 
-//Clears the current console screen and prints the selected menu.
-void ConsoleUI::ShowMenu(char menu)
+EMenus ConsoleUI::ShowMenu(char input, void* ptr /* = nullptr */)
 {
-	switch (menu)
+	system("cls");
+
+	switch (input)
 	{
 	case EMenus::MainMenu:
-		DisplayMainMenu();
-		break;
+		return DisplayMainMenu();
 
-	case EMenus::Login:
-		DisplayLogin();
-		break;
+	case EMenus::LogInMenu:
+		return DisplayLogin();
 
-	case EMenus::CreateUser:
-		DisplayCreateUser();
-		break;
+	case EMenus::LoginWelcomeMenu:
+		return DisplayLoginWelcome(ptr);
 
-	case EMenus::DeleteUser:
-		DisplayDeleteUser();
-		break;
+	case EMenus::ViewMessageMenu:
+		return DisplayViewMessage();
 
-	case EMenus::ViewUsers:
-		DisplayViewUsers();
-		break;
+	case EMenus::CreateAccountMenu:
+		return DisplayCreateAccount();
+
+	case EMenus::DeleteAccountMenu:
+		return DisplayDeleteAccount();
+
+	case EMenus::ViewAccountsMenu:
+		return DisplayViewAccounts();
 
 	default:
-		PRINT("Error: No menu selection found."); //This should never happen.
-		break;
+		return EMenus::InvalidMenu;
 	}
 }
 
-
-void ConsoleUI::DisplayMainMenu()
+void ConsoleUI::ShowApplicationMessage(const std::string& msg, bool alsoClearScreen /* = false */)
 {
-	system("cls");
+	if (alsoClearScreen)
+		system("cls");
+
+	PRINT(msg);
+}
+
+
+EMenus ConsoleUI::DisplayMainMenu()
+{
 	PRINT(MAIN_MENU_STR);
+	return EMenus::MainMenu;
 }
 
-void ConsoleUI::DisplayLogin()
+EMenus ConsoleUI::DisplayLogin()
 {
-	system("cls");
 	PRINT(LOGIN_STR);
+	return EMenus::LogInMenu;
+}
+
+EMenus ConsoleUI::DisplayLoginWelcome(void* ptr)
+{
+	Account* account = static_cast<Account*>(ptr);
 	
+	//TODO: Clean this horrendous shite up...
+	PRINT("Welcome ");
+	PRINT(account->GetName());
+	PRINT("!\n\n");
+
+	return EMenus::LoginWelcomeMenu;
 }
 
-void ConsoleUI::DisplayCreateUser()
+EMenus ConsoleUI::DisplayCreateAccount()
 {
-	system("cls");
-	PRINT(CREATE_USER_STR);
+	PRINT(CREATE_ACCOUNT_STR);
+	return EMenus::CreateAccountMenu;
 }
 
-void ConsoleUI::DisplayDeleteUser()
+EMenus ConsoleUI::DisplayDeleteAccount()
 {
-	system("cls");
-	PRINT(DELETE_USER_STR);
+	PRINT(DELETE_ACCOUNT_STR);
+	return EMenus::DeleteAccountMenu;
 }
 
-void ConsoleUI::DisplayViewUsers()
+EMenus ConsoleUI::DisplayViewAccounts()
 {
-	system("cls");
-	PRINT(VIEW_USERS_STR);
+	PRINT(VIEW_ACCOUNTS_STR);
+	return EMenus::ViewAccountsMenu;
+}
+
+EMenus ConsoleUI::DisplayViewMessage()
+{
+	return EMenus::ViewMessageMenu;
 }

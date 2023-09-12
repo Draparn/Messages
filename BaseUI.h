@@ -1,13 +1,19 @@
 #pragma once
+#include <string>
 
 //The different types of "menu screens" that the application can show.
 enum EMenus : char
 {
+	InvalidMenu = 0,
+
 	MainMenu = '0',
-	Login,
-	CreateUser,
-	DeleteUser,
-	ViewUsers
+	LogInMenu = '1',
+	CreateAccountMenu = '2',
+	DeleteAccountMenu = '3',
+	ViewAccountsMenu = '4',
+
+	LoginWelcomeMenu,
+	ViewMessageMenu
 };
 
 
@@ -15,6 +21,7 @@ enum EMenus : char
 class BaseUI
 {
 public:
-	virtual void ShowMenu(char menu) = 0;
+	virtual EMenus ShowMenu(char input, void* ptr = nullptr) = 0;
+	virtual void ShowApplicationMessage(const std::string& msg, bool alsoClearScreen = false) = 0;
 
 };

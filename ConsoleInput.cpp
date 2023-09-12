@@ -11,6 +11,11 @@ char ConsoleInput::GetChar()
 	return m_Selection;
 }
 
+bool ConsoleInput::GetSpecifiedChar(char c)
+{
+	return tolower(GetChar()) == tolower(c);
+}
+
 void ConsoleInput::GetLine(std::string& str)
 {
 	getline(std::cin, str);

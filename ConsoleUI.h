@@ -6,37 +6,40 @@
 class ConsoleUI : public BaseUI
 {
 public:
-	void ShowMenu(char menu) override;
+	EMenus ShowMenu(char input, void* ptr = nullptr) override;	
+	void ShowApplicationMessage(const std::string& msg, bool alsoClearScreen = false) override;	//TODO: Modify this to take a variable amount of args.
 
 private:
-	void DisplayMainMenu();
-	void DisplayLogin();
-	void DisplayCreateUser();
-	void DisplayDeleteUser();
-	void DisplayViewUsers();
+	EMenus DisplayMainMenu();
+	EMenus DisplayLogin();
+	EMenus DisplayLoginWelcome(void* ptr);
+	EMenus DisplayCreateAccount();
+	EMenus DisplayDeleteAccount();
+	EMenus DisplayViewAccounts();
+	EMenus DisplayViewMessage();
 
 	//Constant strings that display the different menus in the console window.
 	const char* MAIN_MENU_STR =
 		"Welcome to Messages!\n\n"
-		"1. User Login\n"
-		"2. Create User\n"
-		"3. Delete User\n"
-		"4. View Users\n"
+		"1. Log in\n"
+		"2. Create Account\n"
+		"3. Delete Account\n"
+		"4. View Accounts\n"
 		"\nx. Exit.\n\n";
 
 	const char* LOGIN_STR =
-		"User login\n"
-		"Please enter your User name: ";
+		"Account login\n\n"
+		"Please enter your Account name: ";
 	
-	const char* CREATE_USER_STR =
-		"Create new User\n"
-		"Please enter your desired User name: ";
+	const char* CREATE_ACCOUNT_STR =
+		"Create new Account\n\n"
+		"Please enter your desired Account name: ";
 	
-	const char* DELETE_USER_STR =
-		"Delete User\n"
-		"Please specify which User name to delete: ";
+	const char* DELETE_ACCOUNT_STR =
+		"Delete Account\n\n"
+		"Please specify which Account name to delete: ";
 
-	const char* VIEW_USERS_STR =
-		"These are the currently registered users:\n\n";
+	const char* VIEW_ACCOUNTS_STR =
+		"These are the currently registered accounts:\n\n";
 
 };

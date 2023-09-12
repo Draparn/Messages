@@ -9,6 +9,9 @@ public:
 	//Returns a single char value taken from input stream using getchar().
 	char GetChar() override;
 
+	//Returns whether the user entered the specified character or not.
+	bool GetSpecifiedChar(char c) override;
+
 	//Sets a std::string ref using getline()
 	void GetLine(std::string& str) override;
 
