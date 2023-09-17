@@ -15,12 +15,22 @@ bool AccountManager::CreateUserAccount(std::string& desiredAccountName)
 
 bool AccountManager::DeleteUserAccount(std::string& accountToDelete)
 {
-	//Coming soon.
+	if (Account* acc = GetUserAccount(accountToDelete))
+	{
+		m_UserAccounts.erase(
+			std::remove(m_UserAccounts.begin(), m_UserAccounts.end(), *acc),
+			m_UserAccounts.end()
+		);
+
+		return true;
+	}
+
+	return false;
 }
 
 Account* AccountManager::GetUserAccount(std::string& accountName)
 {
-	for (Account& account : m_UserAccounts)
+	for (auto& account : m_UserAccounts)
 	{
 		if (account.GetName() == accountName)
 		{

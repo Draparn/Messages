@@ -5,39 +5,49 @@
 #define PRINT(x) std::cout << x;	//TODO: Modify this to take a variable amount of args.
 
 
-EMenus ConsoleUI::ShowMenu(char input, void* ptr /* = nullptr */)
+void ConsoleUI::ShowMenu(EMenus menu, void* ptr /* = nullptr */)
 {
 	system("cls");
 
-	switch (input)
+	switch (menu)
 	{
 	case EMenus::MainMenu:
-		return DisplayMainMenu();
+		PRINT(MAIN_MENU_STR);
+		break;
 
 	case EMenus::LogInMenu:
-		return DisplayLogin();
+		PRINT(LOGIN_STR);
+		break;
 
 	case EMenus::LoginWelcomeMenu:
-		return DisplayLoginWelcome(ptr);
+	{
+		Account* account = static_cast<Account*>(ptr);
 
-	case EMenus::ViewMessageMenu:
-		return DisplayViewMessage();
+		//TODO: Replace this with the PRINT macro above when that has been expanded to take a variable amount of arguments.
+		std::cout << "Welcome " << account->GetName() << "! You have "
+			<< account->GetUnreadMessagesCount() << " unread messages.\n";
+
+		break;
+	}
 
 	case EMenus::CreateAccountMenu:
-		return DisplayCreateAccount();
+		PRINT(CREATE_ACCOUNT_STR);
+		break;
 
 	case EMenus::DeleteAccountMenu:
-		return DisplayDeleteAccount();
+		PRINT(DELETE_ACCOUNT_STR);
+		break;
 
 	case EMenus::ViewAccountsMenu:
-		return DisplayViewAccounts();
+		PRINT(VIEW_ACCOUNTS_STR);
+		break;
 
 	default:
-		return EMenus::InvalidMenu;
+		break;
 	}
 }
 
-void ConsoleUI::ShowApplicationMessage(const std::string& msg, bool alsoClearScreen /* = false */)
+void ConsoleUI::ShowCustomMessage(const std::string& msg, bool alsoClearScreen /* = false */)
 {
 	if (alsoClearScreen)
 		system("cls");
@@ -45,50 +55,3 @@ void ConsoleUI::ShowApplicationMessage(const std::string& msg, bool alsoClearScr
 	PRINT(msg);
 }
 
-
-EMenus ConsoleUI::DisplayMainMenu()
-{
-	PRINT(MAIN_MENU_STR);
-	return EMenus::MainMenu;
-}
-
-EMenus ConsoleUI::DisplayLogin()
-{
-	PRINT(LOGIN_STR);
-	return EMenus::LogInMenu;
-}
-
-EMenus ConsoleUI::DisplayLoginWelcome(void* ptr)
-{
-	Account* account = static_cast<Account*>(ptr);
-	
-	//TODO: Clean this horrendous shite up...
-	PRINT("Welcome ");
-	PRINT(account->GetName());
-	PRINT("!\n\n");
-
-	return EMenus::LoginWelcomeMenu;
-}
-
-EMenus ConsoleUI::DisplayCreateAccount()
-{
-	PRINT(CREATE_ACCOUNT_STR);
-	return EMenus::CreateAccountMenu;
-}
-
-EMenus ConsoleUI::DisplayDeleteAccount()
-{
-	PRINT(DELETE_ACCOUNT_STR);
-	return EMenus::DeleteAccountMenu;
-}
-
-EMenus ConsoleUI::DisplayViewAccounts()
-{
-	PRINT(VIEW_ACCOUNTS_STR);
-	return EMenus::ViewAccountsMenu;
-}
-
-EMenus ConsoleUI::DisplayViewMessage()
-{
-	return EMenus::ViewMessageMenu;
-}

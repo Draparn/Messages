@@ -6,18 +6,10 @@
 class ConsoleUI : public BaseUI
 {
 public:
-	EMenus ShowMenu(char input, void* ptr = nullptr) override;	
-	void ShowApplicationMessage(const std::string& msg, bool alsoClearScreen = false) override;	//TODO: Modify this to take a variable amount of args.
+	void ShowMenu(EMenus menu, void* ptr = nullptr) override;	
+	void ShowCustomMessage(const std::string& msg, bool alsoClearScreen = false) override;	//TODO: Modify this to take a variable amount of args.
 
 private:
-	EMenus DisplayMainMenu();
-	EMenus DisplayLogin();
-	EMenus DisplayLoginWelcome(void* ptr);
-	EMenus DisplayCreateAccount();
-	EMenus DisplayDeleteAccount();
-	EMenus DisplayViewAccounts();
-	EMenus DisplayViewMessage();
-
 	//Constant strings that display the different menus in the console window.
 	const char* MAIN_MENU_STR =
 		"Welcome to Messages!\n\n"
