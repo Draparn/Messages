@@ -23,6 +23,12 @@ private:
 		"Account login\n\n"
 		"Please enter your Account name: ";
 	
+	const char* LOGGED_IN_STR =
+		"1. Send message.\n"
+		"2. Read new messages.\n"
+		"3. Read archived messages.\n"
+		"4. Log out.\n\n";
+	
 	const char* CREATE_ACCOUNT_STR =
 		"Create new Account\n\n"
 		"Please enter your desired Account name: ";
@@ -33,5 +39,8 @@ private:
 
 	const char* VIEW_ACCOUNTS_STR =
 		"These are the currently registered accounts:\n\n";
+
+	const char* SEND_MESSAGE_STR =
+		"Specify who you would like to send a message to: ";
 
 };

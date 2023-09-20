@@ -14,7 +14,10 @@ public:
 
 	//Sets a std::string ref using getline()
 	void GetLine(std::string& str) override;
-
+	
+	//Loops until a specified character is put in.
+	void WaitForButtonPress(char c, EMenus& currentMenu, EMenus nextMenu) override;
+	
 private:
 	void ClearInputStream();
 	char m_Selection;

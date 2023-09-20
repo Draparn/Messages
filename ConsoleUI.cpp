@@ -19,14 +19,15 @@ void ConsoleUI::ShowMenu(EMenus menu, void* ptr /* = nullptr */)
 		PRINT(LOGIN_STR);
 		break;
 
-	case EMenus::LoginWelcomeMenu:
+	case EMenus::LoggedInMenu:
 	{
 		Account* account = static_cast<Account*>(ptr);
 
 		//TODO: Replace this with the PRINT macro above when that has been expanded to take a variable amount of arguments.
-		std::cout << "Welcome " << account->GetName() << "! You have "
-			<< account->GetUnreadMessagesCount() << " unread messages.\n";
+		std::cout << "Welcome " << account->GetName() << "! You have " <<
+			account->GetUnreadMessagesCount() << " unread message(s). What would you like to do?\n\n";
 
+		PRINT(LOGGED_IN_STR);
 		break;
 	}
 
@@ -42,8 +43,15 @@ void ConsoleUI::ShowMenu(EMenus menu, void* ptr /* = nullptr */)
 		PRINT(VIEW_ACCOUNTS_STR);
 		break;
 
-	default:
+	case EMenus::SendMessageMenu:
+		PRINT(SEND_MESSAGE_STR);
 		break;
+
+	//These don't have any constant strings that need to be printed and will thusly be defaulted.
+	//case EMenus::ReadUnreadMessagesMenu:
+	//case EMenus::ReadArchivedMessagesMenu:
+	//default:
+		//break;
 	}
 }
 

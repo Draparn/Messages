@@ -11,8 +11,10 @@ enum class EMenus
 	CreateAccountMenu,
 	DeleteAccountMenu,
 	ViewAccountsMenu,
-
-	LoginWelcomeMenu
+	LoggedInMenu,
+	SendMessageMenu,
+	ReadUnreadMessagesMenu,
+	ReadArchivedMessagesMenu
 };
 
 

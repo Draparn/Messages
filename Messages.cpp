@@ -3,19 +3,7 @@
 #include "ConsoleUI.h"
 #include "AccountManager.h"
 #include <string>
-
-
-/*
-* == Complete
-x == Not implemented
-
-* Create and Delete user accounts (no need for passwords).
-* Login
-X Send new message to a specific account
-X Reply to a message in inbox
-* View own messages
-* Track unread messages
-*/
+#include <format>
 
 
 int main()
@@ -34,16 +22,6 @@ int main()
 
 	EMenus currentMenu = EMenus::MainMenu;
 	bool quit = false;
-
-
-	//DEBUG, ONLY FOR TESTING!
-	{
-		std::string tmp = "One";
-		accountManager->CreateUserAccount(tmp);
-		tmp = "Two";
-		accountManager->CreateUserAccount(tmp);
-	}
-	//DEBUG, ONLY FOR TESTING!
 
 	do
 	{
@@ -89,12 +67,11 @@ int main()
 		case EMenus::LogInMenu:
 		{
 			std::string str;
-
 			inputSystem->GetLine(str);
 
 			if (currentlyLoggedInAccount = accountManager->GetUserAccount(str))
 			{
-				currentMenu = EMenus::LoginWelcomeMenu;
+				currentMenu = EMenus::LoggedInMenu;
 				customDataPtr = currentlyLoggedInAccount;
 			}
 			else
@@ -104,18 +81,34 @@ int main()
 				if (inputSystem->GetSpecifiedChar('b'))
 				{
 					currentMenu = EMenus::MainMenu;
-					break;
 				}
 			}
 
 			break;
 		}
 
-		case EMenus::LoginWelcomeMenu:
+		case EMenus::LoggedInMenu:
 		{
-			std::vector<TextMessage>& newMessages = currentlyLoggedInAccount->GetUnreadMessages();
-			
-			//TODO: Loop through all messages here and for each one, wait for input to read wither "(n) Next Message", "(p) Previous Message", (b) Back to Main menu etc.
+			switch (tolower(inputSystem->GetChar()))
+			{
+			case '1':
+				currentMenu = EMenus::SendMessageMenu;
+				break;
+
+			case '2':
+				currentMenu = EMenus::ReadUnreadMessagesMenu;
+				break;
+
+			case '3':
+				currentMenu = EMenus::ReadArchivedMessagesMenu;
+				break;
+
+			case '4':
+				currentMenu = EMenus::MainMenu;
+				currentlyLoggedInAccount = nullptr;
+				customDataPtr = nullptr;
+				break;
+			}
 
 			break;
 		}
@@ -134,15 +127,7 @@ int main()
 				uiSystem->ShowCustomMessage("Error: An account with that name already exists.\n\n(b) Back to Main menu.\n");
 			}
 
-			do
-			{
-				if (inputSystem->GetSpecifiedChar('b'))
-				{
-					currentMenu = EMenus::MainMenu;
-					break;
-				}
-			} while (true);
-
+			inputSystem->WaitForButtonPress('b', currentMenu, EMenus::MainMenu);
 			break;
 		}
 
@@ -160,15 +145,7 @@ int main()
 				uiSystem->ShowCustomMessage("Error: An account with that name does not exists.\n\n(b) Back to Main menu.\n");
 			}
 
-			do
-			{
-				if (inputSystem->GetSpecifiedChar('b'))
-				{
-					currentMenu = EMenus::MainMenu;
-					break;
-				}
-			} while (true);
-
+			inputSystem->WaitForButtonPress('b', currentMenu, EMenus::MainMenu);
 			break;
 		}
 
@@ -177,30 +154,177 @@ int main()
 			std::vector<Account>& allAccounts = accountManager->GetAllUserAccounts();
 			for (Account& acc : allAccounts)
 			{
-				uiSystem->ShowCustomMessage(acc.GetName()+"\n");
+				uiSystem->ShowCustomMessage(acc.GetName() + "\n");
 			}
 
 			uiSystem->ShowCustomMessage("\n\n(b) Back to Main menu.\n");
 
-			do
+			inputSystem->WaitForButtonPress('b', currentMenu, EMenus::MainMenu);
+			break;
+		}
+
+		case EMenus::SendMessageMenu:
+		{
+			std::string str;
+			inputSystem->GetLine(str);
+
+			if (Account* receiver = accountManager->GetUserAccount(str))
 			{
-				if (inputSystem->GetSpecifiedChar('b'))
+				uiSystem->ShowCustomMessage("Account found! Please enter your message:\n\n");
+
+				inputSystem->GetLine(str);
+				receiver->AddNewMessage(str, currentlyLoggedInAccount->GetName());
+
+				uiSystem->ShowCustomMessage("Message successfully sent.\n\n(b) Back to your account.\n");
+			}
+			else
+			{
+				uiSystem->ShowCustomMessage("\nError: No account with that name could be found.\t(b) Back to your account.");
+			}
+
+			inputSystem->WaitForButtonPress('b', currentMenu, EMenus::LoggedInMenu);
+			break;
+		}
+
+		case EMenus::ReadUnreadMessagesMenu:
+		{
+			std::vector<TextMessage>& unreadMessages = currentlyLoggedInAccount->GetUnreadMessages();
+			if (unreadMessages.size() == 0)
+			{
+				uiSystem->ShowCustomMessage("You have 0 unread messages. All caught up!\n\n(b) Back to your account.\n", true);
+				inputSystem->WaitForButtonPress('b', currentMenu, EMenus::LoggedInMenu);
+				break;
+			}
+
+			TextMessage* currentMessage;
+			for (size_t i = 0; i < unreadMessages.size();)
+			{
+				currentMessage = &unreadMessages[i];
+				currentMessage->SetHasBeenRead();
+
+				uiSystem->ShowCustomMessage(std::format("Displaying unread message {} of {}.\n\n", i + 1, unreadMessages.size()), true);
+				uiSystem->ShowCustomMessage(std::format("From: {}\n", currentMessage->GetSenderName()));
+				uiSystem->ShowCustomMessage(currentMessage->GetMessageString());
+				uiSystem->ShowCustomMessage("\n\n(p) Read previous message.\t(n) Read next message.\t(r) Reply to message.\t(b) Back to your account.\n");
+
+				switch (tolower(inputSystem->GetChar()))
 				{
-					currentMenu = EMenus::MainMenu;
+				case 'p':
+					if (i > 0)
+					{
+						--i;
+					}
+					break;
+
+				case 'n':
+					if (i < unreadMessages.size() - 1)
+					{
+						++i;
+					}
+					break;
+
+				case 'r':
+				{
+					if (Account* sender = accountManager->GetUserAccount(currentMessage->GetSenderName()))
+					{
+						uiSystem->ShowCustomMessage("Please enter your reply: ");
+						
+						std::string str;
+						inputSystem->GetLine(str);
+
+						sender->AddNewMessage(str, currentlyLoggedInAccount->GetName());
+						uiSystem->ShowCustomMessage("\nMessage sent. Enter any key to continue.\n");
+						inputSystem->GetChar();
+					}
+					else
+					{
+						uiSystem->ShowCustomMessage(std::format("Account with name '{}' does not exist. Enter any key to continue.\n", currentMessage->GetSenderName()));
+						inputSystem->GetChar();
+					}
 					break;
 				}
-				else
-				{
-					int wtf = 5;
+
+				case 'b':
+					i = unreadMessages.size();
+					currentMenu = EMenus::LoggedInMenu;
+					break;
 				}
-			} while (true);
 
+			}
+
+			currentlyLoggedInAccount->ArchiveReadMessages();
 			break;
 		}
 
-		default:
+		case EMenus::ReadArchivedMessagesMenu:
+		{
+			std::vector<TextMessage>& archivedMessages = currentlyLoggedInAccount->GetArchivedMessages();
+			if (archivedMessages.size() == 0)
+			{
+				uiSystem->ShowCustomMessage("You have 0 archived messages.\n\n(b) Back to your account.\n", true);
+				inputSystem->WaitForButtonPress('b', currentMenu, EMenus::LoggedInMenu);
+				break;
+			}
+
+			TextMessage* currentMessage;
+			for (size_t i = 0; i < archivedMessages.size();)
+			{
+				currentMessage = &archivedMessages[i];
+
+				uiSystem->ShowCustomMessage(std::format("Displaying archived message {} of {}.\n\n", i + 1, archivedMessages.size()), true);
+				uiSystem->ShowCustomMessage(std::format("From: {}\n", currentMessage->GetSenderName()));
+				uiSystem->ShowCustomMessage(currentMessage->GetMessageString());
+				uiSystem->ShowCustomMessage("\n\n(p) Read previous message.\t(n) Read next message.\t(r) Reply to message.\t(b) Back to your account.\n");
+
+				switch (tolower(inputSystem->GetChar()))
+				{
+				case 'p':
+					if (i > 0)
+					{
+						--i;
+					}
+					break;
+
+				case 'n':
+					if (i < archivedMessages.size() - 1)
+					{
+						++i;
+					}
+					break;
+
+				case 'r':
+				{
+					if (Account* sender = accountManager->GetUserAccount(currentMessage->GetSenderName()))
+					{
+						uiSystem->ShowCustomMessage("Please enter your reply: ");
+
+						std::string str;
+						inputSystem->GetLine(str);
+
+						sender->AddNewMessage(str, currentlyLoggedInAccount->GetName());
+						uiSystem->ShowCustomMessage("\nMessage sent. Enter any key to continue.\n");
+						inputSystem->GetChar();
+					}
+					else
+					{
+						uiSystem->ShowCustomMessage(std::format("Account with name '{}' does not exist. Enter any key to continue.\n", currentMessage->GetSenderName()));
+						inputSystem->GetChar();
+					}
+					break;
+				}
+
+				case 'b':
+					i = archivedMessages.size();
+					currentMenu = EMenus::LoggedInMenu;
+					break;
+				}
+
+			}
 			break;
 		}
+
+		}
+
 
 	} while (quit == false);
 
