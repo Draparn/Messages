@@ -47,11 +47,9 @@ void ConsoleUI::ShowMenu(EMenus menu, void* ptr /* = nullptr */)
 		PRINT(SEND_MESSAGE_STR);
 		break;
 
-	//These don't have any constant strings that need to be printed and will thusly be defaulted.
-	//case EMenus::ReadUnreadMessagesMenu:
-	//case EMenus::ReadArchivedMessagesMenu:
-	//default:
-		//break;
+		//These cases don't have any constant strings that need to be printed and will thusly be default.
+		//case EMenus::ReadUnreadMessagesMenu:
+		//case EMenus::ReadArchivedMessagesMenu:
 	}
 }
 

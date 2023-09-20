@@ -28,7 +28,7 @@ int main()
 		//Render Menu
 		uiSystem->ShowMenu(currentMenu, customDataPtr);
 
-		//Get / Apply menu-dependent input
+		//Get/Apply input depending on menu
 		switch (currentMenu)
 		{
 		case EMenus::MainMenu:
@@ -324,7 +324,6 @@ int main()
 		}
 
 		}
-
 
 	} while (quit == false);
 
