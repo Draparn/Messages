@@ -51,31 +51,4 @@ void Account::ArchiveReadMessages()
 		it++;
 	}
 
-	SortMessagesBy(m_UnreadMessages, ESortType::Timestamp);
-
-}
-
-void Account::SortMessagesBy(std::vector<TextMessage>& vect, ESortType sort_type)
-{
-	if (vect.empty())
-		return;
-
-	switch (sort_type)
-	{
-	case ESortType::SenderName:
-		std::sort(
-			vect.begin(),
-			vect.end(),
-			[](TextMessage& a, TextMessage& b) { return a.GetSenderName() < b.GetSenderName(); }
-		);
-		break;
-
-	case ESortType::Timestamp:
-		std::sort(
-			vect.begin(),
-			vect.end(),
-			[](TextMessage& a, TextMessage& b) { return a.GetTimeSent() < b.GetTimeSent(); }
-		);
-		break;
-	}
 }

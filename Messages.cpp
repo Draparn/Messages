@@ -2,7 +2,37 @@
 #include "ConsoleInput.h"
 #include "ConsoleUI.h"
 #include "AccountManager.h"
+#include <algorithm>
 
+enum class ESortType
+{
+	SenderName,
+	Timestamp
+};
+static void SortMessagesBy(std::vector<TextMessage>& vect, ESortType sort_type)
+{
+	if (vect.empty())
+		return;
+
+	switch (sort_type)
+	{
+	case ESortType::SenderName:
+		std::sort(
+			vect.begin(),
+			vect.end(),
+			[](TextMessage& a, TextMessage& b) { return a.GetSenderName() < b.GetSenderName(); }
+		);
+		break;
+
+	case ESortType::Timestamp:
+		std::sort(
+			vect.begin(),
+			vect.end(),
+			[](TextMessage& a, TextMessage& b) { return a.GetTimeSent() < b.GetTimeSent(); }
+		);
+		break;
+	}
+}
 
 int main()
 {
@@ -22,12 +52,16 @@ int main()
 	bool quit = false;
 
 	{	//Add some accounts for us to use.
-		std::string accName = "Johan";
-		accountManager->CreateUserAccount(accName);
-		accName = "Pete";
-		accountManager->CreateUserAccount(accName);
-		accName = "Harshal";
-		accountManager->CreateUserAccount(accName);
+		std::string johanStr = "Johan";
+		accountManager->CreateUserAccount(johanStr);
+		std::string PeteStr = "Pete";
+		accountManager->CreateUserAccount(PeteStr);
+		std::string harshalStr = "Harshal";
+		accountManager->CreateUserAccount(harshalStr);
+		
+		Account* johAcc = accountManager->GetUserAccount(johanStr);
+		std::string msg = "A message string.";
+		johAcc->AddNewMessage(msg, PeteStr);
 	}
 
 	do
@@ -196,6 +230,8 @@ int main()
 		case EMenus::ReadUnreadMessagesMenu:
 		{
 			std::vector<TextMessage>& unreadMessages = currentlyLoggedInAccount->GetUnreadMessages();
+			SortMessagesBy(unreadMessages, ESortType::Timestamp);
+
 			if (unreadMessages.size() == 0)
 			{
 				uiSystem->ShowCustomMessage("You have 0 unread messages. All caught up!\n\n(b) Back to your account.\n", true);
@@ -211,13 +247,13 @@ int main()
 				currentMessage->SetHasBeenRead();
 
 				uiSystem->ShowCustomMessage(std::format("Displaying unread message {} of {}.\n\n", i + 1, unreadMessages.size()), true);
-				
+
 				uiSystem->ShowCustomMessage(std::format("From: {}\t", currentMessage->GetSenderName()));
 				localtime_s(&time, &currentMessage->GetTimeSent());
 				uiSystem->ShowCustomMessage(std::format("Message was sent 20{}/{}/{} {}:{}\n", time.tm_year - 100, time.tm_mon, time.tm_mday, time.tm_hour, time.tm_min));
 
 				uiSystem->ShowCustomMessage(currentMessage->GetMessageString());
-				uiSystem->ShowCustomMessage("\n\n(p) Read previous message.\t(n) Read next message.\t(r) Reply to message.\t(b) Back to your account.\n");
+				uiSystem->ShowCustomMessage("\n\n(p) Read previous message.\t(n) Read next message.\t(r) Reply to message.\t(b) Back to your account.\n(s) Sort messages.\n\n");
 
 				switch (tolower(inputSystem->GetChar()))
 				{
@@ -253,6 +289,26 @@ int main()
 						uiSystem->ShowCustomMessage(std::format("Account with name '{}' does not exist. Enter any key to continue.\n", currentMessage->GetSenderName()));
 						inputSystem->GetChar();
 					}
+					break;
+				}
+
+				case 's':
+				{
+					uiSystem->ShowCustomMessage("How would you like to sort them?\n(1) By time sent.\t(2) By sender.\n");
+					char input;
+					do
+					{
+						input = inputSystem->GetChar();
+						if (input == '1')
+						{
+							SortMessagesBy(unreadMessages, ESortType::Timestamp);
+						}
+						else if (input == '2')
+						{
+							SortMessagesBy(unreadMessages, ESortType::SenderName);
+						}
+					} while (input != '1' && input != '2');
+
 					break;
 				}
 
