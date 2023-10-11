@@ -247,7 +247,6 @@ int main()
 				currentMessage->SetHasBeenRead();
 
 				uiSystem->ShowCustomMessage(std::format("Displaying unread message {} of {}.\n\n", i + 1, unreadMessages.size()), true);
-
 				uiSystem->ShowCustomMessage(std::format("From: {}\t", currentMessage->GetSenderName()));
 				localtime_s(&time, &currentMessage->GetTimeSent());
 				uiSystem->ShowCustomMessage(std::format("Message was sent 20{}/{}/{} {}:{}\n", time.tm_year - 100, time.tm_mon, time.tm_mday, time.tm_hour, time.tm_min));
@@ -327,6 +326,8 @@ int main()
 		case EMenus::ReadArchivedMessagesMenu:
 		{
 			std::vector<TextMessage>& archivedMessages = currentlyLoggedInAccount->GetArchivedMessages();
+			SortMessagesBy(archivedMessages, ESortType::Timestamp);
+
 			if (archivedMessages.size() == 0)
 			{
 				uiSystem->ShowCustomMessage("You have 0 archived messages.\n\n(b) Back to your account.\n", true);
@@ -335,14 +336,18 @@ int main()
 			}
 
 			TextMessage* currentMessage;
+			struct tm time;
 			for (size_t i = 0; i < archivedMessages.size();)
 			{
 				currentMessage = &archivedMessages[i];
 
 				uiSystem->ShowCustomMessage(std::format("Displaying archived message {} of {}.\n\n", i + 1, archivedMessages.size()), true);
-				uiSystem->ShowCustomMessage(std::format("From: {}\n", currentMessage->GetSenderName()));
+				uiSystem->ShowCustomMessage(std::format("From: {}\t", currentMessage->GetSenderName()));
+				localtime_s(&time, &currentMessage->GetTimeSent());
+				uiSystem->ShowCustomMessage(std::format("Message was sent 20{}/{}/{} {}:{}\n", time.tm_year - 100, time.tm_mon, time.tm_mday, time.tm_hour, time.tm_min));
+
 				uiSystem->ShowCustomMessage(currentMessage->GetMessageString());
-				uiSystem->ShowCustomMessage("\n\n(p) Read previous message.\t(n) Read next message.\t(r) Reply to message.\t(b) Back to your account.\n");
+				uiSystem->ShowCustomMessage("\n\n(p) Read previous message.\t(n) Read next message.\t(r) Reply to message.\t(b) Back to your account.\n(s) Sort messages.\n\n");
 
 				switch (tolower(inputSystem->GetChar()))
 				{
@@ -378,6 +383,26 @@ int main()
 						uiSystem->ShowCustomMessage(std::format("Account with name '{}' does not exist. Enter any key to continue.\n", currentMessage->GetSenderName()));
 						inputSystem->GetChar();
 					}
+					break;
+				}
+
+				case 's':
+				{
+					uiSystem->ShowCustomMessage("How would you like to sort them?\n(1) By time sent.\t(2) By sender.\n");
+					char input;
+					do
+					{
+						input = inputSystem->GetChar();
+						if (input == '1')
+						{
+							SortMessagesBy(archivedMessages, ESortType::Timestamp);
+						}
+						else if (input == '2')
+						{
+							SortMessagesBy(archivedMessages, ESortType::SenderName);
+						}
+					} while (input != '1' && input != '2');
+
 					break;
 				}
 
