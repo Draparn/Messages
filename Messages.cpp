@@ -2,8 +2,6 @@
 #include "ConsoleInput.h"
 #include "ConsoleUI.h"
 #include "AccountManager.h"
-#include <string>
-#include <format>
 
 
 int main()
@@ -22,6 +20,15 @@ int main()
 
 	EMenus currentMenu = EMenus::MainMenu;
 	bool quit = false;
+
+	{	//Add some accounts for us to use.
+		std::string accName = "Johan";
+		accountManager->CreateUserAccount(accName);
+		accName = "Pete";
+		accountManager->CreateUserAccount(accName);
+		accName = "Harshal";
+		accountManager->CreateUserAccount(accName);
+	}
 
 	do
 	{
@@ -197,38 +204,43 @@ int main()
 			}
 
 			TextMessage* currentMessage;
+			struct tm time;
 			for (size_t i = 0; i < unreadMessages.size();)
 			{
 				currentMessage = &unreadMessages[i];
 				currentMessage->SetHasBeenRead();
 
 				uiSystem->ShowCustomMessage(std::format("Displaying unread message {} of {}.\n\n", i + 1, unreadMessages.size()), true);
-				uiSystem->ShowCustomMessage(std::format("From: {}\n", currentMessage->GetSenderName()));
+				
+				uiSystem->ShowCustomMessage(std::format("From: {}\t", currentMessage->GetSenderName()));
+				localtime_s(&time, &currentMessage->GetTimeSent());
+				uiSystem->ShowCustomMessage(std::format("Message was sent 20{}/{}/{} {}:{}\n", time.tm_year - 100, time.tm_mon, time.tm_mday, time.tm_hour, time.tm_min));
+
 				uiSystem->ShowCustomMessage(currentMessage->GetMessageString());
 				uiSystem->ShowCustomMessage("\n\n(p) Read previous message.\t(n) Read next message.\t(r) Reply to message.\t(b) Back to your account.\n");
 
 				switch (tolower(inputSystem->GetChar()))
 				{
-				case 'p':
+				case 'p':	//previous message
 					if (i > 0)
 					{
 						--i;
 					}
 					break;
 
-				case 'n':
+				case 'n':	//next message
 					if (i < unreadMessages.size() - 1)
 					{
 						++i;
 					}
 					break;
 
-				case 'r':
+				case 'r':	//reply to message
 				{
 					if (Account* sender = accountManager->GetUserAccount(currentMessage->GetSenderName()))
 					{
 						uiSystem->ShowCustomMessage("Please enter your reply: ");
-						
+
 						std::string str;
 						inputSystem->GetLine(str);
 
@@ -244,7 +256,7 @@ int main()
 					break;
 				}
 
-				case 'b':
+				case 'b':	//back to previous menu
 					i = unreadMessages.size();
 					currentMenu = EMenus::LoggedInMenu;
 					break;

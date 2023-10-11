@@ -3,6 +3,12 @@
 #include <vector>
 #include "TextMessage.h"
 
+enum class ESortType
+{
+	SenderName,
+	Timestamp
+};
+
 class Account
 {
 public:
@@ -17,6 +23,7 @@ public:
 
 	void AddNewMessage(std::string& message, std::string& sender);
 	void ArchiveReadMessages();
+	void SortMessagesBy(std::vector<TextMessage>& vect, ESortType sort_type);
 
 private:
 	std::vector<TextMessage> m_UnreadMessages;
