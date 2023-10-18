@@ -16,10 +16,10 @@ public:
 	void GetLine(std::string& str) override;
 	
 	//Loops until a specified character is put in.
-	void WaitForButtonPress(char c, EMenus& currentMenu, EMenus nextMenu) override;
+	void WaitForSpecifiedChar(char c) override;
 	
 private:
 	void ClearInputStream();
-	char m_Selection;
+	char m_Selection = '.';
 
 };

@@ -11,15 +11,15 @@ void ConsoleUI::ShowMenu(EMenus menu, void* ptr /* = nullptr */)
 
 	switch (menu)
 	{
-	case EMenus::MainMenu:
+	case EMenus::eMainMenu:
 		PRINT(MAIN_MENU_STR);
 		break;
 
-	case EMenus::LogInMenu:
+	case EMenus::eLogInMenu:
 		PRINT(LOGIN_STR);
 		break;
 
-	case EMenus::LoggedInMenu:
+	case EMenus::eLoggedInMenu:
 	{
 		Account* account = static_cast<Account*>(ptr);
 
@@ -31,19 +31,19 @@ void ConsoleUI::ShowMenu(EMenus menu, void* ptr /* = nullptr */)
 		break;
 	}
 
-	case EMenus::CreateAccountMenu:
+	case EMenus::eCreateAccountMenu:
 		PRINT(CREATE_ACCOUNT_STR);
 		break;
 
-	case EMenus::DeleteAccountMenu:
+	case EMenus::eDeleteAccountMenu:
 		PRINT(DELETE_ACCOUNT_STR);
 		break;
 
-	case EMenus::ViewAccountsMenu:
+	case EMenus::eViewAccountsMenu:
 		PRINT(VIEW_ACCOUNTS_STR);
 		break;
 
-	case EMenus::SendMessageMenu:
+	case EMenus::eSendMessageMenu:
 		PRINT(SEND_MESSAGE_STR);
 		break;
 

@@ -27,13 +27,12 @@ void ConsoleInput::ClearInputStream()
 	std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
 }
 
-void ConsoleInput::WaitForButtonPress(char c, EMenus& currentMenu, EMenus nextMenu)
+void ConsoleInput::WaitForSpecifiedChar(char c)
 {
 	do
 	{
 		if (GetSpecifiedChar(c))
 		{
-			currentMenu = nextMenu;
 			break;
 		}
 	} while (true);

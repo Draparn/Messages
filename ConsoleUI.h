@@ -25,7 +25,7 @@ private:
 	
 	const char* LOGGED_IN_STR =
 		"1. Send message.\n"
-		"2. Read new messages.\n"
+		"2. Read unread messages.\n"
 		"3. Read archived messages.\n"
 		"4. Log out.\n\n";
 	
