@@ -1,8 +1,9 @@
-#include "Account.h"
 #include <algorithm>
 
-Account::Account(std::string& name) :
-	m_AccountName(name)
+#include "Account.h"
+
+
+Account::Account(std::string& name) : m_AccountName(name)
 {}
 
 void Account::AddNewMessage(std::string& message, std::string& sender)
@@ -31,8 +32,8 @@ void Account::ArchiveReadMessages()
 	);*/
 
 
-	//Purposefully ugly solution. I kept the modern cleaner solution above.
-	//Remove the read messages by manually moving the last element over and popping the back. This unsorts the vector, is a pain in the @ss and reads horribly.
+	//Purposefully ugly solution. I kept my preferred, cleaner solution above.
+	//Here we remove the read messages by manually moving the last element over and popping the back. This unsorts the vector, is a pain in the @ss and reads horribly.
 	for (auto it = m_UnreadMessages.begin(); it != m_UnreadMessages.end(); )
 	{
 		if (it->HasBeenRead())

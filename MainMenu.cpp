@@ -1,31 +1,27 @@
 #include "MainMenu.h"
-#include "BaseInput.h"
-#include "BaseUI.h"
-#include "AccountManager.h"
-#include "LoggedIn.h"
+#include "AccountsMenu.h"
+#include "LoggedInMenu.h"
 
 
-BaseApplicationState* MainMenu::Run(Account*& currently_logged_in_account)
+EMenus MainMenu::Run(Account*& currently_logged_in_account)
 {
-	m_UISystem->ShowMenu(EMenus::eMainMenu);
+	m_UISystem->ShowMenu(m_Tag);
 
-	char input = tolower(m_InputSystem->GetChar());
-
-	switch (input)
+	switch (tolower(m_InputSystem->GetChar()))
 	{
 	case 'x':	//Quit application
-		return nullptr;
+		return EMenus::ExitApplication;
 
 	case '1':	//Log in
 	{
-		m_UISystem->ShowMenu(EMenus::eLogInMenu);
+		m_UISystem->ShowMenu(EMenus::LogInMenu);
 
 		std::string str;
 		m_InputSystem->GetLine(str);
 
 		if (currently_logged_in_account = m_AccountManager->GetUserAccount(str))
 		{
-			return new LoggedIn(m_InputSystem, m_UISystem, m_AccountManager);
+			return EMenus::LoggedInMenu;
 		}
 		else
 		{
@@ -36,12 +32,9 @@ BaseApplicationState* MainMenu::Run(Account*& currently_logged_in_account)
 		break;
 	}
 
-	case '2':	//Create account
-	case '3':	//Delete account
-	case '4':	//View accounts
-		//new accounts() current state
-		break;
+	case '2':	//Accounts
+		return EMenus::AccountsMenu;
 	}
 
-	return this;
+	return m_Tag;
 }

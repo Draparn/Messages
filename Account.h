@@ -1,7 +1,9 @@
 #pragma once
 #include <string>
 #include <vector>
+
 #include "TextMessage.h"
+
 
 class Account
 {

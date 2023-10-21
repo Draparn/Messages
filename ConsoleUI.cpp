@@ -1,6 +1,7 @@
+#include <iostream>
+
 #include "ConsoleUI.h"
 #include "Account.h"
-#include <iostream>
 
 #define PRINT(x) std::cout << x;	//TODO: Modify this to take a variable amount of args.
 
@@ -11,15 +12,15 @@ void ConsoleUI::ShowMenu(EMenus menu, void* ptr /* = nullptr */)
 
 	switch (menu)
 	{
-	case EMenus::eMainMenu:
+	case EMenus::MainMenu:
 		PRINT(MAIN_MENU_STR);
 		break;
 
-	case EMenus::eLogInMenu:
+	case EMenus::LogInMenu:
 		PRINT(LOGIN_STR);
 		break;
 
-	case EMenus::eLoggedInMenu:
+	case EMenus::LoggedInMenu:
 	{
 		Account* account = static_cast<Account*>(ptr);
 
@@ -31,25 +32,26 @@ void ConsoleUI::ShowMenu(EMenus menu, void* ptr /* = nullptr */)
 		break;
 	}
 
-	case EMenus::eCreateAccountMenu:
+	case EMenus::AccountsMenu:
+		PRINT(ACCOUNTS_STR);
+		break;
+
+	case EMenus::CreateAccountMenu:
 		PRINT(CREATE_ACCOUNT_STR);
 		break;
 
-	case EMenus::eDeleteAccountMenu:
+	case EMenus::DeleteAccountMenu:
 		PRINT(DELETE_ACCOUNT_STR);
 		break;
 
-	case EMenus::eViewAccountsMenu:
+	case EMenus::ViewAccountsMenu:
 		PRINT(VIEW_ACCOUNTS_STR);
 		break;
 
-	case EMenus::eSendMessageMenu:
+	case EMenus::SendMessageMenu:
 		PRINT(SEND_MESSAGE_STR);
 		break;
 
-		//These cases don't have any constant strings that need to be printed and will thusly be default.
-		//case EMenus::ReadUnreadMessagesMenu:
-		//case EMenus::ReadArchivedMessagesMenu:
 	}
 }
 

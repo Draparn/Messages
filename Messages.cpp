@@ -1,113 +1,53 @@
 #include <iostream>
+#include <unordered_map>
+
 #include "AccountManager.h"
+#include "AccountsMenu.h"
 #include "ConsoleInput.h"
 #include "ConsoleUI.h"
+#include "LoggedInMenu.h"
 #include "MainMenu.h"
 
 
 int main()
 {
-	//UI System. Interchangable by changing the class type in make_unique.
 	std::shared_ptr<BaseUI> uiSystem = std::make_shared<ConsoleUI>();
-
-	//Input system. Interchangable by changing the class type in make_unique.
-	//Here because different UI systems might require a custom input system too.
 	std::shared_ptr<BaseInput> inputSystem = std::make_shared<ConsoleInput>();
-
 	std::shared_ptr<AccountManager> accountManager = std::make_shared<AccountManager>();
 
-	std::shared_ptr<BaseApplicationState> currentMennu = std::make_shared<MainMenu>(inputSystem, uiSystem, accountManager);
+	std::unordered_map<EMenus, std::shared_ptr<BaseApplicationState>> applicationMenus
+	{
+		{EMenus::MainMenu, std::make_shared<MainMenu>(inputSystem, uiSystem, accountManager)},
+		{EMenus::LoggedInMenu, std::make_shared<LoggedInMenu>(inputSystem, uiSystem, accountManager)},
+		{EMenus::AccountsMenu, std::make_shared<AccountsMenu>(inputSystem, uiSystem, accountManager)}
+	};
+
+	std::shared_ptr<BaseApplicationState> currentMenu = applicationMenus[EMenus::MainMenu];
 
 	Account* currentlyLoggedInAccount = nullptr;
 
 	{	//Add some accounts for us to use.
-		std::string johanStr = "Johan";
-		accountManager->CreateUserAccount(johanStr);
-		std::string PeteStr = "Pete";
-		accountManager->CreateUserAccount(PeteStr);
-		std::string harshalStr = "Harshal";
-		accountManager->CreateUserAccount(harshalStr);
+		std::string nameStr = "Johan";
+		accountManager->CreateUserAccount(nameStr);
+		nameStr = "Pete";
+		accountManager->CreateUserAccount(nameStr);
+		nameStr = "Harshal";
+		accountManager->CreateUserAccount(nameStr);
 
-		Account* johAcc = accountManager->GetUserAccount(johanStr);
+		Account* harshalAcc = accountManager->GetUserAccount(nameStr);
+		nameStr = "Pete";
 		std::string msg = "A message string.";
-		johAcc->AddNewMessage(msg, PeteStr);
+		harshalAcc->AddNewMessage(msg, nameStr);
 	}
 
+	EMenus nextMenu;
 	do
 	{
-		//Render Menu
-		//uiSystem->ShowMenu(currentMenu, customDataPtr);
-
-		auto newMenu = currentMennu->Run(currentlyLoggedInAccount);
-		if (newMenu == nullptr)	//Quit application
+		nextMenu = currentMenu->Run(currentlyLoggedInAccount);
+		if (nextMenu == EMenus::ExitApplication)
 			break;
 
-		if (currentMennu.get() != newMenu)
-		{
-			currentMennu.reset(newMenu);
-		}
-
-		//TEMP, REMOVE THIS!!
-		continue;
-		//TEMP, REMOVE THIS!!
-
-
-		//Get/Apply input depending on menu
-		switch (EMenus::eCreateAccountMenu)
-		{
-
-		case EMenus::eCreateAccountMenu:
-		{
-			std::string str;
-			inputSystem->GetLine(str);
-
-			if (accountManager->CreateUserAccount(str))
-			{
-				uiSystem->ShowCustomMessage("Account created successfully! Head to Main menu to log in.\n\n(b) Back to Main menu.\n");
-			}
-			else
-			{
-				uiSystem->ShowCustomMessage("Error: An account with that name already exists.\n\n(b) Back to Main menu.\n");
-			}
-
-			inputSystem->WaitForSpecifiedChar('b');
-			break;
-		}
-
-		case EMenus::eDeleteAccountMenu:
-		{
-			std::string str;
-			inputSystem->GetLine(str);
-
-			if (accountManager->DeleteUserAccount(str))
-			{
-				uiSystem->ShowCustomMessage("Account deleted successfully!\n\n(b) Back to Main menu.\n");
-			}
-			else
-			{
-				uiSystem->ShowCustomMessage("Error: An account with that name does not exists.\n\n(b) Back to Main menu.\n");
-			}
-
-			inputSystem->WaitForSpecifiedChar('b');
-			break;
-		}
-
-		case EMenus::eViewAccountsMenu:
-		{
-			std::vector<Account>& allAccounts = accountManager->GetAllUserAccounts();
-			for (Account& acc : allAccounts)
-			{
-				uiSystem->ShowCustomMessage(acc.GetName() + "\n");
-			}
-
-			uiSystem->ShowCustomMessage("\n\n(b) Back to Main menu.\n");
-
-			inputSystem->WaitForSpecifiedChar('b');
-			break;
-		}
-
-		}
-
+		currentMenu = applicationMenus[nextMenu];
 	} while (true);
 
 }

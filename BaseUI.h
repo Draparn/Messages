@@ -4,17 +4,17 @@
 //The different types of "menu screens" that the application can show.
 enum class EMenus
 {
-	eInvalidMenu = 0,
+	MainMenu,
+	LogInMenu,
+	AccountsMenu,
+	CreateAccountMenu,
+	DeleteAccountMenu,
+	ViewAccountsMenu,
+	LoggedInMenu,
+	SendMessageMenu,
+	ExitApplication,
 
-	eMainMenu,
-	eLogInMenu,
-	eCreateAccountMenu,
-	eDeleteAccountMenu,
-	eViewAccountsMenu,
-	eLoggedInMenu,
-	eSendMessageMenu,
-	eReadUnreadMessagesMenu,
-	eReadArchivedMessagesMenu
+	InvalidMenu
 };
 
 

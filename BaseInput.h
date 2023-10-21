@@ -3,6 +3,7 @@
 
 enum class EMenus;
 
+
 class BaseInput
 {
 public:

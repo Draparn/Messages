@@ -1,6 +1,7 @@
+#include <iostream>
+
 #include "ConsoleInput.h"
 #include "BaseUI.h"
-#include <iostream>
 
 
 char ConsoleInput::GetChar()
