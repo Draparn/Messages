@@ -14,7 +14,7 @@ class BaseUI;
 class BaseApplicationState
 {
 public:
-	virtual EMenus Run(Account*& currently_logged_in_account) = 0;
+	[[nodiscard]] virtual EMenus Run(Account*& currently_logged_in_account) = 0;
 	inline EMenus GetTag() { return m_Tag; };
 
 protected:

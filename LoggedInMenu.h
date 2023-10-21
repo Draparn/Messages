@@ -22,7 +22,7 @@ public:
 		m_Tag = EMenus::LoggedInMenu;
 	};
 
-	EMenus Run(Account*& currently_logged_in_account) override;
+	[[nodiscard]] EMenus Run(Account*& currently_logged_in_account) override;
 
 private:
 	void ReadMessages(Account& currently_logged_in_account, bool read_unread_msgs);
