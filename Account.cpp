@@ -3,10 +3,10 @@
 #include "Account.h"
 
 
-Account::Account(std::string& name) : m_AccountName(name)
+Account::Account(const std::string_view name) : m_AccountName(name)
 {}
 
-void Account::AddNewMessage(std::string& message, std::string& sender)
+void Account::AddNewMessage(std::string& message, std::string_view sender)
 {
 	m_UnreadMessages.emplace_back(
 		message,

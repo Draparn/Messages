@@ -8,9 +8,9 @@
 class AccountManager
 {
 public:
-	bool CreateUserAccount(std::string& desiredAccountName);
-	bool DeleteUserAccount(std::string& accountToDelete);
-	Account* GetUserAccount(std::string& accountName);
+	bool CreateUserAccount(const std::string_view desiredAccountName);
+	bool DeleteUserAccount(const std::string_view accountToDelete);
+	Account* GetUserAccount(const std::string_view accountName);
 	inline std::vector<Account>& GetAllUserAccounts() { return m_UserAccounts; }
 
 private:

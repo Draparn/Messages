@@ -1,9 +1,7 @@
-#include <iostream>
+#include <print>
 
 #include "ConsoleUI.h"
 #include "Account.h"
-
-#define PRINT(x) std::cout << x;	//TODO: Modify this to take a variable amount of args.
 
 
 void ConsoleUI::ShowMenu(EMenus menu, void* ptr /* = nullptr */)
@@ -13,43 +11,59 @@ void ConsoleUI::ShowMenu(EMenus menu, void* ptr /* = nullptr */)
 	switch (menu)
 	{
 	case EMenus::MainMenu:
-		PRINT(MAIN_MENU_STR);
+		std::print(
+			"Welcome to Messages!\n\n"
+			"1. Log in\n"
+			"2. Accounts\n"
+			"\nx. Exit.\n");
 		break;
 
 	case EMenus::LogInMenu:
-		PRINT(LOGIN_STR);
+		std::print(
+			"Account login\n\n"
+			"Please enter your Account name: ");
 		break;
 
 	case EMenus::LoggedInMenu:
 	{
 		Account* account = static_cast<Account*>(ptr);
 
-		//TODO: Replace this with the PRINT macro above when that has been expanded to take a variable amount of arguments.
-		std::cout << "Welcome " << account->GetName() << "! You have " <<
-			account->GetUnreadMessagesCount() << " unread message(s). What would you like to do?\n\n";
-
-		PRINT(LOGGED_IN_STR);
+		std::print("Welcome {0}! You have {1} unread message(s). What would you like to do?\n\n", account->GetName(), account->GetUnreadMessagesCount());
+		std::print(
+			"1. Send message.\n"
+			"2. Read unread messages.\n"
+			"3. Read archived messages.\n"
+			"4. Log out.\n\n");
 		break;
 	}
 
 	case EMenus::AccountsMenu:
-		PRINT(ACCOUNTS_STR);
+		std::print(
+			"What would you like to do?\n\n"
+			"1. Create account.\n"
+			"2. Delete account.\n"
+			"3. View accounts.\n"
+			"4. Back to Main menu.\n\n");
 		break;
 
 	case EMenus::CreateAccountMenu:
-		PRINT(CREATE_ACCOUNT_STR);
+		std::print(
+			"Create new Account\n\n"
+			"Please enter your desired Account name: ");
 		break;
 
 	case EMenus::DeleteAccountMenu:
-		PRINT(DELETE_ACCOUNT_STR);
+		std::print(
+			"Delete Account\n\n"
+			"Please specify which Account name to delete: ");
 		break;
 
 	case EMenus::ViewAccountsMenu:
-		PRINT(VIEW_ACCOUNTS_STR);
+		std::print("These are the currently registered accounts:\n\n");
 		break;
 
 	case EMenus::SendMessageMenu:
-		PRINT(SEND_MESSAGE_STR);
+		std::print("Specify who you would like to send a message to: ");
 		break;
 
 	}
@@ -60,6 +74,6 @@ void ConsoleUI::ShowCustomMessage(const std::string& msg, bool alsoClearScreen /
 	if (alsoClearScreen)
 		system("cls");
 
-	PRINT(msg);
+	std::print("{}", msg);
 }
 

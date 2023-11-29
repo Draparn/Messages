@@ -1,7 +1,7 @@
 #include "AccountManager.h"
 
 
-bool AccountManager::CreateUserAccount(std::string& desiredAccountName)
+bool AccountManager::CreateUserAccount(const std::string_view desiredAccountName)
 {
 	if (GetUserAccount(desiredAccountName))
 	{
@@ -13,7 +13,7 @@ bool AccountManager::CreateUserAccount(std::string& desiredAccountName)
 	return true;
 }
 
-bool AccountManager::DeleteUserAccount(std::string& accountToDelete)
+bool AccountManager::DeleteUserAccount(const std::string_view accountToDelete)
 {
 	if (Account* acc = GetUserAccount(accountToDelete))
 	{
@@ -28,7 +28,7 @@ bool AccountManager::DeleteUserAccount(std::string& accountToDelete)
 	return false;
 }
 
-Account* AccountManager::GetUserAccount(std::string& accountName)
+Account* AccountManager::GetUserAccount(const std::string_view accountName)
 {
 	for (auto& account : m_UserAccounts)
 	{

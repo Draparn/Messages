@@ -27,17 +27,13 @@ int main()
 	Account* currentlyLoggedInAccount = nullptr;
 
 	{	//Add some accounts for us to use.
-		std::string nameStr = "Johan";
-		accountManager->CreateUserAccount(nameStr);
-		nameStr = "Pete";
-		accountManager->CreateUserAccount(nameStr);
-		nameStr = "Harshal";
-		accountManager->CreateUserAccount(nameStr);
+		accountManager->CreateUserAccount("Johan");
+		accountManager->CreateUserAccount("Pete");
+		accountManager->CreateUserAccount("Harshal");
 
-		Account* harshalAcc = accountManager->GetUserAccount(nameStr);
-		nameStr = "Pete";
+		Account* harshalAcc = accountManager->GetUserAccount("Harshal");
 		std::string msg = "A message string.";
-		harshalAcc->AddNewMessage(msg, nameStr);
+		harshalAcc->AddNewMessage(msg, "Pete");
 	}
 
 	EMenus nextMenu;
