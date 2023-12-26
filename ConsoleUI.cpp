@@ -69,7 +69,7 @@ void ConsoleUI::ShowMenu(EMenus menu, void* ptr /* = nullptr */)
 	}
 }
 
-void ConsoleUI::ShowCustomMessage(const std::string& msg, bool alsoClearScreen /* = false */)
+void ConsoleUI::ShowCustomMessage(const std::string_view msg, bool alsoClearScreen /* = false */)
 {
 	if (alsoClearScreen)
 		system("cls");

@@ -17,11 +17,7 @@ bool AccountManager::DeleteUserAccount(const std::string_view accountToDelete)
 {
 	if (Account* acc = GetUserAccount(accountToDelete))
 	{
-		m_UserAccounts.erase(
-			std::remove(m_UserAccounts.begin(), m_UserAccounts.end(), *acc),
-			m_UserAccounts.end()
-		);
-
+		std::erase(m_UserAccounts, accountToDelete);
 		return true;
 	}
 

@@ -7,7 +7,7 @@ class TextMessage
 {
 public:
 	TextMessage() = delete;
-	TextMessage(std::string& str, std::string_view sender, time_t current_time);
+	TextMessage(std::string_view str, std::string_view sender, time_t current_time);
 
 	bool operator == (const TextMessage& msg) { return &msg.m_MessageString == &m_MessageString; }
 

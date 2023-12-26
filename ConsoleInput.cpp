@@ -8,7 +8,10 @@ char ConsoleInput::GetChar()
 {
 	m_Selection = getchar();
 
-	ClearInputStream();
+	//clear input stream
+	std::cin.clear();
+	std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+
 	return m_Selection;
 }
 
@@ -22,19 +25,8 @@ void ConsoleInput::GetLine(std::string& str)
 	getline(std::cin, str);
 }
 
-void ConsoleInput::ClearInputStream()
-{
-	std::cin.clear();
-	std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-}
-
 void ConsoleInput::WaitForSpecifiedChar(char c)
 {
-	do
-	{
-		if (GetSpecifiedChar(c))
-		{
-			break;
-		}
-	} while (true);
+	while (!GetSpecifiedChar(c))
+	{}
 }

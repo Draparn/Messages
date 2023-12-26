@@ -19,7 +19,6 @@ public:
 	void WaitForSpecifiedChar(char c) override;
 	
 private:
-	void ClearInputStream();
 	char m_Selection = '.';
 
 };

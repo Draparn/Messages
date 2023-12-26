@@ -22,7 +22,8 @@ int main()
 		{EMenus::AccountsMenu, std::make_shared<AccountsMenu>(inputSystem, uiSystem, accountManager)}
 	};
 
-	std::shared_ptr<BaseApplicationState> currentMenu = applicationMenus[EMenus::MainMenu];
+	auto currentMenu = applicationMenus[EMenus::MainMenu];
+	EMenus nextMenu;
 
 	Account* currentlyLoggedInAccount = nullptr;
 
@@ -32,11 +33,9 @@ int main()
 		accountManager->CreateUserAccount("Harshal");
 
 		Account* harshalAcc = accountManager->GetUserAccount("Harshal");
-		std::string msg = "A message string.";
-		harshalAcc->AddNewMessage(msg, "Pete");
+		harshalAcc->AddNewMessage("A message string.", "Pete");
 	}
 
-	EMenus nextMenu;
 	do
 	{
 		nextMenu = currentMenu->Run(currentlyLoggedInAccount);

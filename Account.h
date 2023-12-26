@@ -17,7 +17,7 @@ public:
 	inline std::vector<TextMessage>& GetArchivedMessages() { return m_ArchivedMessages; }
 	inline const std::size_t GetUnreadMessagesCount() const { return m_UnreadMessages.size(); }
 
-	void AddNewMessage(std::string& message, std::string_view sender);
+	void AddNewMessage(std::string_view message, std::string_view sender);
 	void ArchiveReadMessages();
 
 private:
