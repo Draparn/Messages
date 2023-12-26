@@ -14,14 +14,15 @@ class BaseUI;
 class BaseApplicationState
 {
 public:
-	[[nodiscard]] virtual EMenus Run() = 0;
-	inline EMenus GetTag() { return m_Tag; };
+	[[nodiscard]] virtual EMenus Run() const = 0;
 
 protected:
 	std::shared_ptr<BaseInput> m_InputSystem = nullptr;
 	std::shared_ptr<BaseUI> m_UISystem = nullptr;
 	std::shared_ptr<AccountManager> m_AccountManager = nullptr;
+	
 	static Account* m_CurrentlyLoggedInAccount;
+
 	EMenus m_Tag = EMenus::InvalidMenu;
 
 };

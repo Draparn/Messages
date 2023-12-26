@@ -10,7 +10,7 @@ AccountsMenu::AccountsMenu(std::shared_ptr<BaseInput> input_system, std::shared_
 	m_Tag = EMenus::AccountsMenu;
 }
 
-EMenus AccountsMenu::Run()
+EMenus AccountsMenu::Run() const
 {
 	m_UISystem->ShowMenu(m_Tag);
 
@@ -60,8 +60,8 @@ EMenus AccountsMenu::Run()
 	{
 		m_UISystem->ShowMenu(EMenus::ViewAccountsMenu);
 
-		std::vector<Account>& allAccounts = m_AccountManager->GetAllUserAccounts();
-		for (Account& acc : allAccounts)
+		const std::vector<Account>& allAccounts = m_AccountManager->GetAllUserAccounts();
+		for (const Account& acc : allAccounts)
 		{
 			m_UISystem->ShowCustomMessage(acc.GetName() + "\n");
 		}

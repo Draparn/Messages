@@ -13,9 +13,9 @@ Account* BaseApplicationState::m_CurrentlyLoggedInAccount = nullptr;
 
 int main()
 {
-	auto uiSystem = std::make_shared<ConsoleUI>();
-	auto inputSystem = std::make_shared<ConsoleInput>();
-	auto accountManager = std::make_shared<AccountManager>();
+	const auto uiSystem = std::make_shared<ConsoleUI>();
+	const auto inputSystem = std::make_shared<ConsoleInput>();
+	const auto accountManager = std::make_shared<AccountManager>();
 
 	std::unordered_map<EMenus, std::shared_ptr<BaseApplicationState>> applicationMenus
 	{

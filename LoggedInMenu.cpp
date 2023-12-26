@@ -14,7 +14,7 @@ LoggedInMenu::LoggedInMenu(std::shared_ptr<BaseInput> input_system, std::shared_
 	m_Tag = EMenus::LoggedInMenu;
 }
 
-EMenus LoggedInMenu::Run()
+EMenus LoggedInMenu::Run() const
 {
 	m_UISystem->ShowMenu(m_Tag, m_CurrentlyLoggedInAccount);
 
@@ -48,13 +48,13 @@ EMenus LoggedInMenu::Run()
 
 	case '2':	//Read unread messages
 	{
-		ReadMessages(*m_CurrentlyLoggedInAccount, true);
+		ReadMessages(true);
 		break;
 	}
 
 	case '3':	//Read archived messages
 	{
-		ReadMessages(*m_CurrentlyLoggedInAccount, false);
+		ReadMessages(false);
 		break;
 	}
 
@@ -66,9 +66,9 @@ EMenus LoggedInMenu::Run()
 	return m_Tag;
 }
 
-void LoggedInMenu::ReadMessages(Account& currently_logged_in_account, bool read_unread_msgs)
+void LoggedInMenu::ReadMessages(bool read_unread_msgs) const
 {
-	std::vector<TextMessage>& messages = read_unread_msgs ? currently_logged_in_account.GetUnreadMessages() : currently_logged_in_account.GetArchivedMessages();
+	auto messages = read_unread_msgs ? m_CurrentlyLoggedInAccount->GetUnreadMessages() : m_CurrentlyLoggedInAccount->GetArchivedMessages();
 	if (messages.empty())
 	{
 		m_UISystem->ShowCustomMessage("0 messages found.\n\n(b) Back to your account.\n", true);
@@ -113,7 +113,7 @@ void LoggedInMenu::ReadMessages(Account& currently_logged_in_account, bool read_
 				std::string str;
 				m_InputSystem->GetLine(str);
 
-				sender->AddNewMessage(str, currently_logged_in_account.GetName());
+				sender->AddNewMessage(str, m_CurrentlyLoggedInAccount->GetName());
 				m_UISystem->ShowCustomMessage("\nMessage sent. Press (b) to continue.\n");
 				m_InputSystem->GetSpecifiedChar('b');
 			}
@@ -148,10 +148,10 @@ void LoggedInMenu::ReadMessages(Account& currently_logged_in_account, bool read_
 	}
 
 	if (read_unread_msgs)
-		currently_logged_in_account.ArchiveReadMessages();
+		m_CurrentlyLoggedInAccount->ArchiveReadMessages();
 }
 
-void LoggedInMenu::SortMessagesBy(std::vector<TextMessage>& vect, ESortType sort_type)
+void LoggedInMenu::SortMessagesBy(std::vector<TextMessage>& vect, ESortType sort_type) const
 {
 	if (vect.empty())
 		return;
@@ -162,7 +162,7 @@ void LoggedInMenu::SortMessagesBy(std::vector<TextMessage>& vect, ESortType sort
 		std::sort(
 			vect.begin(),
 			vect.end(),
-			[](TextMessage& a, TextMessage& b) { return a.GetSenderName() < b.GetSenderName(); }
+			[](const TextMessage& a, const TextMessage& b) { return a.GetSenderName() < b.GetSenderName(); }
 		);
 		break;
 
@@ -170,7 +170,7 @@ void LoggedInMenu::SortMessagesBy(std::vector<TextMessage>& vect, ESortType sort
 		std::sort(
 			vect.begin(),
 			vect.end(),
-			[](TextMessage& a, TextMessage& b) { return a.GetTimeSent() < b.GetTimeSent(); }
+			[](const TextMessage& a, const TextMessage& b) { return a.GetTimeSent() < b.GetTimeSent(); }
 		);
 		break;
 	}

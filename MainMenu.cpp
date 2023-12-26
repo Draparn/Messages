@@ -11,7 +11,7 @@ MainMenu::MainMenu(std::shared_ptr<BaseInput> input_system, std::shared_ptr<Base
 	m_Tag = EMenus::MainMenu;
 }
 
-EMenus MainMenu::Run()
+EMenus MainMenu::Run() const
 {
 	m_UISystem->ShowMenu(m_Tag);
 

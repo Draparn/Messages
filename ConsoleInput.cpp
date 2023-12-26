@@ -15,17 +15,17 @@ char ConsoleInput::GetChar()
 	return m_Selection;
 }
 
-bool ConsoleInput::GetSpecifiedChar(char c)
+bool ConsoleInput::GetSpecifiedChar(const char c)
 {
 	return tolower(GetChar()) == tolower(c);
 }
 
-void ConsoleInput::GetLine(std::string& str)
+void ConsoleInput::GetLine(std::string& str) const
 {
 	getline(std::cin, str);
 }
 
-void ConsoleInput::WaitForSpecifiedChar(char c)
+void ConsoleInput::WaitForSpecifiedChar(const char c)
 {
 	while (!GetSpecifiedChar(c))
 	{}

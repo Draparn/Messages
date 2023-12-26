@@ -15,7 +15,7 @@ bool AccountManager::CreateUserAccount(const std::string_view desiredAccountName
 
 bool AccountManager::DeleteUserAccount(const std::string_view accountToDelete)
 {
-	if (Account* acc = GetUserAccount(accountToDelete))
+	if (const Account* acc = GetUserAccount(accountToDelete))
 	{
 		std::erase(m_UserAccounts, accountToDelete);
 		return true;

@@ -6,7 +6,7 @@
 class ConsoleUI : public BaseUI
 {
 public:
-	void ShowMenu(EMenus menu, void* ptr = nullptr) override;	
-	void ShowCustomMessage(const std::string_view msg, bool alsoClearScreen = false) override;
+	void ShowMenu(EMenus menu, void* ptr = nullptr) const override;	
+	void ShowCustomMessage(const std::string_view msg, bool alsoClearScreen = false) const override;
 
 };

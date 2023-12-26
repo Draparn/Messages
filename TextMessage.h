@@ -8,11 +8,11 @@ class TextMessage
 public:
 	TextMessage() = delete;
 	TextMessage(std::string_view str, std::string_view sender, time_t current_time);
-
-	inline std::string& GetMessageString() { return m_MessageString; }
-	inline std::string& GetSenderName() { return m_Sender; }
-	inline time_t& GetTimeSent() { return m_TimeSent; }
-	inline bool HasBeenRead() { return m_HasBeenRead; }
+	
+	inline const std::string& GetMessageString() const { return m_MessageString; }
+	inline const std::string& GetSenderName() const { return m_Sender; }
+	inline const time_t& GetTimeSent() const { return m_TimeSent; }
+	inline bool HasBeenRead() const { return m_HasBeenRead; }
 	inline void SetHasBeenRead() { m_HasBeenRead = true; }
 
 private:

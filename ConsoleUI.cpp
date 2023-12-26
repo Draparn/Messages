@@ -4,7 +4,7 @@
 #include "Account.h"
 
 
-void ConsoleUI::ShowMenu(EMenus menu, void* ptr /* = nullptr */)
+void ConsoleUI::ShowMenu(EMenus menu, void* ptr /* = nullptr */) const
 {
 	system("cls");
 
@@ -26,7 +26,7 @@ void ConsoleUI::ShowMenu(EMenus menu, void* ptr /* = nullptr */)
 
 	case EMenus::LoggedInMenu:
 	{
-		Account* account = static_cast<Account*>(ptr);
+		const auto account = static_cast<Account*>(ptr);
 
 		std::print("Welcome {0}! You have {1} unread message(s). What would you like to do?\n\n", account->GetName(), account->GetUnreadMessagesCount());
 		std::print(
@@ -69,7 +69,7 @@ void ConsoleUI::ShowMenu(EMenus menu, void* ptr /* = nullptr */)
 	}
 }
 
-void ConsoleUI::ShowCustomMessage(const std::string_view msg, bool alsoClearScreen /* = false */)
+void ConsoleUI::ShowCustomMessage(const std::string_view msg, bool alsoClearScreen /* = false */) const
 {
 	if (alsoClearScreen)
 		system("cls");

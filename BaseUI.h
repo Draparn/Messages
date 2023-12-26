@@ -22,7 +22,7 @@ enum class EMenus
 class BaseUI
 {
 public:
-	virtual void ShowMenu(EMenus menu, void* ptr = nullptr) = 0;
-	virtual void ShowCustomMessage(const std::string_view msg, bool alsoClearScreen = false) = 0;
+	virtual void ShowMenu(EMenus menu, void* ptr = nullptr) const = 0;
+	virtual void ShowCustomMessage(const std::string_view msg, bool alsoClearScreen = false) const = 0;
 
 };
