@@ -14,9 +14,9 @@ LoggedInMenu::LoggedInMenu(std::shared_ptr<BaseInput> input_system, std::shared_
 	m_Tag = EMenus::LoggedInMenu;
 }
 
-EMenus LoggedInMenu::Run(Account*& currently_logged_in_account)
+EMenus LoggedInMenu::Run()
 {
-	m_UISystem->ShowMenu(m_Tag, currently_logged_in_account);
+	m_UISystem->ShowMenu(m_Tag, m_CurrentlyLoggedInAccount);
 
 	switch (tolower(m_InputSystem->GetChar()))
 	{
@@ -32,7 +32,7 @@ EMenus LoggedInMenu::Run(Account*& currently_logged_in_account)
 			m_UISystem->ShowCustomMessage("Account found! Please enter your message:\n\n");
 
 			m_InputSystem->GetLine(str);
-			receiver->AddNewMessage(str, currently_logged_in_account->GetName());
+			receiver->AddNewMessage(str, m_CurrentlyLoggedInAccount->GetName());
 
 			m_UISystem->ShowCustomMessage("Message successfully sent.\n\n(b) Back to your account.\n");
 		}
@@ -48,18 +48,18 @@ EMenus LoggedInMenu::Run(Account*& currently_logged_in_account)
 
 	case '2':	//Read unread messages
 	{
-		ReadMessages(*currently_logged_in_account, true);
+		ReadMessages(*m_CurrentlyLoggedInAccount, true);
 		break;
 	}
 
 	case '3':	//Read archived messages
 	{
-		ReadMessages(*currently_logged_in_account, false);
+		ReadMessages(*m_CurrentlyLoggedInAccount, false);
 		break;
 	}
 
 	case '4':	//Log out
-		currently_logged_in_account = nullptr;
+		m_CurrentlyLoggedInAccount = nullptr;
 		return EMenus::MainMenu;
 	}
 
@@ -129,13 +129,13 @@ void LoggedInMenu::ReadMessages(Account& currently_logged_in_account, bool read_
 		case 's':	//Sort messages
 		{
 			m_UISystem->ShowCustomMessage("How would you like to sort them?\n(1) By time sent.\t(2) By sender.\n");
-			
+
 			char input;
 			do
 			{
 				input = m_InputSystem->GetChar();
 			} while (input != '1' && input != '2');
-			
+
 			SortMessagesBy(messages, input == '1' ? ESortType::Timestamp : ESortType::SenderName);
 
 			break;

@@ -10,7 +10,7 @@ AccountsMenu::AccountsMenu(std::shared_ptr<BaseInput> input_system, std::shared_
 	m_Tag = EMenus::AccountsMenu;
 }
 
-EMenus AccountsMenu::Run(Account*& currently_logged_in_account)
+EMenus AccountsMenu::Run()
 {
 	m_UISystem->ShowMenu(m_Tag);
 

@@ -9,8 +9,6 @@ public:
 	TextMessage() = delete;
 	TextMessage(std::string_view str, std::string_view sender, time_t current_time);
 
-	bool operator == (const TextMessage& msg) { return &msg.m_MessageString == &m_MessageString; }
-
 	inline std::string& GetMessageString() { return m_MessageString; }
 	inline std::string& GetSenderName() { return m_Sender; }
 	inline time_t& GetTimeSent() { return m_TimeSent; }

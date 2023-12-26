@@ -9,11 +9,13 @@
 #include "MainMenu.h"
 
 
+Account* BaseApplicationState::m_CurrentlyLoggedInAccount = nullptr;
+
 int main()
 {
-	std::shared_ptr<BaseUI> uiSystem = std::make_shared<ConsoleUI>();
-	std::shared_ptr<BaseInput> inputSystem = std::make_shared<ConsoleInput>();
-	std::shared_ptr<AccountManager> accountManager = std::make_shared<AccountManager>();
+	auto uiSystem = std::make_shared<ConsoleUI>();
+	auto inputSystem = std::make_shared<ConsoleInput>();
+	auto accountManager = std::make_shared<AccountManager>();
 
 	std::unordered_map<EMenus, std::shared_ptr<BaseApplicationState>> applicationMenus
 	{
@@ -25,8 +27,6 @@ int main()
 	auto currentMenu = applicationMenus[EMenus::MainMenu];
 	EMenus nextMenu;
 
-	Account* currentlyLoggedInAccount = nullptr;
-
 	{	//Add some accounts for us to use.
 		accountManager->CreateUserAccount("Johan");
 		accountManager->CreateUserAccount("Pete");
@@ -36,13 +36,8 @@ int main()
 		harshalAcc->AddNewMessage("A message string.", "Pete");
 	}
 
-	do
+	while ((nextMenu = currentMenu->Run()) != EMenus::ExitApplication)
 	{
-		nextMenu = currentMenu->Run(currentlyLoggedInAccount);
-		if (nextMenu == EMenus::ExitApplication)
-			break;
-
 		currentMenu = applicationMenus[nextMenu];
-	} while (true);
-
+	}
 }
