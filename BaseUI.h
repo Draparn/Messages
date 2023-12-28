@@ -2,7 +2,7 @@
 #include <string>
 
 //The different types of "menu screens" that the application can show.
-enum class EMenus
+ enum class [[nodiscard]] EMenus
 {
 	MainMenu,
 	LogInMenu,

@@ -14,7 +14,7 @@ class BaseUI;
 class BaseApplicationState
 {
 public:
-	[[nodiscard]] virtual EMenus Run() const = 0;
+	virtual EMenus Run() const = 0;
 
 protected:
 	std::shared_ptr<BaseInput> m_InputSystem = nullptr;
